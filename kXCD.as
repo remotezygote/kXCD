@@ -11,7 +11,6 @@ package {
 	import flash.net.*;
 	import flash.external.ExternalInterface;
 	public class kXCD extends Sprite {
-		public var baseJSController:String = "kXCD";
 		public var loader:URLLoader = new URLLoader();
 		public function kXCD() {
 			Security.allowDomain('*');
@@ -19,7 +18,7 @@ package {
 			ExternalInterface.call("window.kXCD.setAvailability",true);
 		}
 		public function spit(event:Event):void {
-			ExternalInterface.call(baseJSController+".onComplete",escape(loader.data));
+			ExternalInterface.call("window.kXCD.onComplete",escape(loader.data));
 		}
 		public function get(url:String, data:String = null):void {
 			var request:URLRequest = new URLRequest();
