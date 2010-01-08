@@ -1,0 +1,11 @@
+== kXCD is for Cross-Domain AJAX-style requests
+
+Designed for use in Kosmix.com's labs products, the Kosmix kXCD library allows your javascript to communicate across domains in much the same way as using an XMLHTTPRequest object. It is intended to eventually be a both a standalone library and a drop-in for various JS frameworks to enable those frameworks to achieve seamless cross-domain communication without the need for special syntax.
+
+The communication is accomplished using an ultra-small and simple Flash object which can be self-hosted or loaded from Kosmix.com. This sub-1k Flash object allows any Javascript to communicate with domains that have allowed cross-domain flash requests. Many popular sites have this allowance by default, including Flickr API, Google, Microsoft and many others.
+
+== ToDo
+
+ - Add more support for headers and other request options - minimal set included for first release.
+ - Seamless integration with Prototype, JQuery, MooTools and other JS frameworks.
+ - Clean up after my naive coding practices.
