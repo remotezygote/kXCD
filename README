@@ -4,6 +4,10 @@ Designed for use in Kosmix.com's labs products, the Kosmix kXCD library allows y
 
 The communication is accomplished using an ultra-small and simple Flash object which can be self-hosted or loaded from Kosmix.com. This sub-1k Flash object allows any Javascript to communicate with domains that have allowed cross-domain flash requests. Many popular sites have this allowance by default, including Flickr API, Google, Microsoft and many others.
 
+== More info
+
+ - Cross-domain policy file specification (http://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html)
+
 == ToDo
 
  - Add more support for headers and other request options - minimal set included for first release.
