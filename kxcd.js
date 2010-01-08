@@ -28,12 +28,12 @@ var kXCD = (function() {
 						ecnt++;
 					};
 				};
-			}catch(e){/*throw({"message":e.message+" at "+ecnt,"name":e.name});*/};
+			}catch(e){callback(null);};
 		},
 		setAvailability: function() {
 			try {
 				window.kXCD._setAvailability_r.apply(window.kXCD,arguments);
-			} catch(e){/*throw({"message":e.message+" in setAvailability","name":e.name});*/};
+			} catch(e){window.kXCD.callback(null);};
 		},
 		_setAvailability_r: function(val) {
 			if(val==true) {
@@ -57,7 +57,7 @@ var kXCD = (function() {
 			window.kXCD = this;
 			return(this);
 		},
-		// FlashLoader adapted loosely from Scott Schiller's Soundmanager2 library
+		// FlashLoader adapted loosely from Scott Schiller's Soundmanager2 library - Thanks Schill!
 		FlashLoader: function(options) {
 			var core = {
 				options: {
@@ -123,7 +123,7 @@ var kXCD = (function() {
 								oEl.innerHTML = '<object id="'+options.id+'" data="'+options.swfUrl+'" type="application/x-shockwave-flash" width="100%" height="100%"><param name="movie" value="'+options.swfUrl+'" /><param name="AllowScriptAccess" value="always" /><!-- --></object>';
 							}
 							return(this.getMovie());
-						} catch(e) { return(false);/* Eventually will want to catch this and report error to server via logParam */};
+						} catch(e){return(false);};
 					};
 					return(false);
 				}
