@@ -8,6 +8,10 @@ The communication is accomplished using an ultra-small and simple Flash object w
 
  - Cross-domain policy file specification (http://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html)
 
+== Version 2.0
+
+ - Added support for multiple requests concurrently while maintaining a mapping between request and its callback. (kXCD2)
+
 == ToDo
 
  - Add more support for headers and other request options - minimal set included for first release.
