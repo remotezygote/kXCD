@@ -2,51 +2,46 @@ var kXCD = (function() {
 	var core = {
 		options: {
 			id: "kXCD_"+Math.round(Math.random()*2147483647),
-			swfUrl: "http://www.kosmix.com/flash/kxcd.swf"
+			swfUrl: "http://www.kosmix.com/flash/kxcd2.swf"
 		},
+		call_queue: [],
+		callbacks: [],
 		availability: false,
 		get: function(url,callback,options) {
 			var ecnt=0;
 			try {
-				this.callback = callback;
-				this.url = url;
-				this.data = false;
-				this.req_options = options;
-				ecnt++;
-				if(options.data && options.method && options.method.toLowerCase()=="post") this.data = options.data;
-				ecnt++;
+				var trackid = this.callbacks.length;
+				this.callbacks[trackid] = callback;
+				this.call_queue.push([url,options,trackid]);
 				if(!this.fl) {
 					ecnt+=99;
 					this.fl = this.FlashLoader(this.options);
 				};
 				if(this.availability) {
-					if(options.data) {
-						this.fl.get(this.url,options.data);
-						ecnt+=32;
-					} else {
-						this.fl.get(this.url);
-						ecnt++;
-					};
+					this._setAvailability_r.apply(this,[]);
 				};
-			}catch(e){callback(null);};
+			}catch(e){};
 		},
-		setAvailability: function() {
+		sA: function() {
 			try {
 				window.kXCD._setAvailability_r.apply(window.kXCD,arguments);
-			} catch(e){window.kXCD.callback(null);};
+			} catch(e){};
 		},
-		_setAvailability_r: function(val) {
-			if(val==true) {
-				this.availability = true;
-				if(this.req_options.data) {
-					this.fl.get(this.url,this.req_options.data);
-				} else {
-					this.fl.get(this.url);
-				};
+		_setAvailability_r: function() {
+			this.availability = true;
+			while(this.call_queue.length>0) {
+				this.doRequest.apply(this,this.call_queue.shift());
 			};
 		},
-		onComplete: function(data) {
-			if(this.callback) this.callback(unescape(data));
+		doRequest: function(url,options,trackid) {
+			if(options.data) {
+				this.fl.get(trackid,url,options.data);
+			} else {
+				this.fl.get(trackid,url);
+			};
+		},
+		oC: function(trackid,data) {
+			if(this.callbacks[trackid]) this.callbacks[trackid](unescape(data));
 		},
 		init: function(options) {
 			if(options) {
@@ -57,7 +52,7 @@ var kXCD = (function() {
 			window.kXCD = this;
 			return(this);
 		},
-		// FlashLoader adapted loosely from Scott Schiller's Soundmanager2 library - Thanks Schill!
+		// FlashLoader adapted loosely from Scott Schiller's Soundmanager2 library
 		FlashLoader: function(options) {
 			var core = {
 				options: {
@@ -80,7 +75,7 @@ var kXCD = (function() {
 				getMovie: function() {
 			    return this.options.isIE?window[this.options.id]:(this.options.isSafari?document.getElementById(this.options.id)||document[this.options.id]:document.getElementById(this.options.id));
 			  },
-				createSWF: function(options) {
+				createSWF: function() {
 					var options = this.options;
 					var oMovie = null;
 					if(options.isIE) {
@@ -123,12 +118,12 @@ var kXCD = (function() {
 								oEl.innerHTML = '<object id="'+options.id+'" data="'+options.swfUrl+'" type="application/x-shockwave-flash" width="100%" height="100%"><param name="movie" value="'+options.swfUrl+'" /><param name="AllowScriptAccess" value="always" /><!-- --></object>';
 							}
 							return(this.getMovie());
-						} catch(e){return(false);};
+						} catch(e) { return(false);/* Eventually will want to catch this and report error to server via logParam */};
 					};
 					return(false);
 				}
 			};
-			if(!options) var options = {};
+			if(!options) options = {};
 			return(core.init(options));
 		}
 	};
